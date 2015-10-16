@@ -8,5 +8,11 @@ setup(
     license='',
     author='Steven Manning',
     author_email='manning@tamu.edu',
-    description=''
+    description='',
+    install_requires=[
+        "django==1.8",
+        "djangorestframework",
+        "markdown",
+        "django-filter"
+    ],
 )
