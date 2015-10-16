@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^json/get-token/$', views.AuthJSON.as_view(), name="auth-json"),
     url(r'^json/services/$', views.ServiceListJSON.as_view(), name="service-list"),
     url(r'^json/formtypes/$', views.FormTypeListJSON.as_view(), name="formtype-list"),
-    url(r'^json/form/([0-9]+)/', views.FormListJSON.as_view(), name="form-list"),
-    url(r'^json/form/([0-9])+/([0-9])+/', views.FormDetailJSON.as_view(), name="form-detail"),
+    url(r'^json/form/([0-9]+)/$', views.FormListJSON.as_view(), name="form-list"),
+    url(r'^json/form/([0-9]+)/([0-9]+)/$', views.FormDetailJSON.as_view(), name="form-detail"),
 ]

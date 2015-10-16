@@ -4,8 +4,9 @@ from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 
+
 class Service(models.Model):
-    name = models.CharField(max_length=100,help_text="Name of Service")
+    name = models.CharField(max_length=100, help_text="Name of Service")
     description = models.TextField(help_text="Description of Service")
 
     def __unicode__(self):
@@ -54,9 +55,9 @@ class ServiceFormField(models.Model):
         ordering = ['position']
 
     def as_dict(self):
-        return {"field_label": self.field_label, "field_type": self.field_type, "form": self.form.as_dict(),
-                "help_text": self.help_text, "position": self.position, "required": self.required,
-                "choices":[x.choice for x in self.serviceformfieldchoice_set.all()]
+        return {"name": self.field_label, "type": self.field_type, "id": self.id,
+                "help_text": self.help_text, "required": self.required,
+                "choices": [{"id": x.id, "value": x.choice} for x in self.serviceformfieldchoice_set.all()]
                 }
 
 
@@ -92,11 +93,13 @@ class ServiceRequestForm(models.Model): #One per customer per service request
     completed = models.DateTimeField(auto_now=True, editable=False)
 
     def as_dict(self):
-        rf = {
-            "service": self.service.as_dict(),
-            "form": self.form.as_dict(),
-            "fields": []
-        }
+        form = dict()
+        form['id'] = self.id
+        form['form_type'] = self.form.id
+        form['form_name'] = self.form.name
+        form['form_desc'] = self.form.description
+        form['fields'] = []
+
         field_objs = self.form.serviceformfield_set.all()
         for f in field_objs:
             field_as_dict = f.as_dict()
@@ -104,8 +107,8 @@ class ServiceRequestForm(models.Model): #One per customer per service request
                 field_as_dict['value'] = ServiceRequestFormFieldAnswer.objects.filter(form=self, field=f).get().answer
             else:
                 field_as_dict['value'] = None
-            rf['fields'].append(field_as_dict)
-        return rf
+            form['fields'].append(field_as_dict)
+        return form
 
     def __unicode__(self):
         return "%s - %s for %s" % (self.service, self.form, self.requested_by)
@@ -114,8 +117,14 @@ class ServiceRequestForm(models.Model): #One per customer per service request
     def save(self, data, *args, **kwargs):
         super(ServiceRequestForm, self).save(*args, **kwargs)
         for field_id, value in data.iteritems():
-            answer = ServiceRequestFormFieldAnswer(form=self, field=ServiceFormField.objects.get(pk=field_id), answer=value)
-            answer.save()
+            answer_query = self.servicerequestformfieldanswer_set.filter(field_id=field_id)
+            if answer_query:
+                answer = answer_query.get()
+                answer.answer = value
+                answer.save()
+            else:
+                answer = ServiceRequestFormFieldAnswer(form=self, field=ServiceFormField.objects.get(pk=field_id), answer=value)
+                answer.save()
         return self
 
     def send_message(self):

@@ -73,8 +73,16 @@ class FormDetailJSON(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, form_type_id, form_id, format=None):
-       srf = get_object_or_404(models.ServiceRequestForm, form_id)
-       return Response(srf.as_dict())
+        srf = get_object_or_404(models.ServiceRequestForm, id=form_id)
+        return Response(srf.as_dict())
+
 
     def post(self, request, form_type_id, form_id, format=None):
-        pass
+        srf = get_object_or_404(models.ServiceRequestForm, id=form_id)
+        service_form = srf.form
+        service = service_form.service
+        f = forms.RequestForm(request.POST, service_form=service_form)
+        if f.is_valid():
+            srf.save(f.cleaned_data)
+            return Response(srf.id, status=status.HTTP_201_CREATED)
+        return Response(f.as_dict(), status=status.HTTP_400_BAD_REQUEST)
