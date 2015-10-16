@@ -15,7 +15,8 @@ class ChoicesInline(admin.StackedInline):
 class FieldAdmin(admin.ModelAdmin):
     inlines = [ChoicesInline]
 
+admin.site.register(ServiceRequestForm)
+admin.site.register(ServiceRequestFormFieldAnswer)
 admin.site.register(ServiceForm, ServiceFormAdmin)
 admin.site.register(ServiceFormField, FieldAdmin)
-
 admin.site.register(Service)
