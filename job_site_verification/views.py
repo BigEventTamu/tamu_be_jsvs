@@ -1,7 +1,9 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.middleware import csrf
 from django.contrib.auth.models import User
+from django.views.generic import View
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -86,3 +88,13 @@ class FormDetailJSON(APIView):
             srf.save(f.cleaned_data)
             return Response(srf.id, status=status.HTTP_201_CREATED)
         return Response(f.as_dict(), status=status.HTTP_400_BAD_REQUEST)
+
+
+class FormTypeList(View):
+    def get(self, request):
+        form_types_list = models.ServiceForm.objects.all()
+        return render(request, "form_edit/form_list.html", {"form_types": form_types_list})
+
+class Index(View):
+    def get(self, request):
+        return render(request, "index.html",)

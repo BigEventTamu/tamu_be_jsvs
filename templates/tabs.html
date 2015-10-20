@@ -1,0 +1,7 @@
+<ul class="nav nav-tabs">
+    <li role="presentation" class="{% if active_tab == 'tab1' %} active{% endif %}"><a href="#">My Forms</a></li>
+    {% if user.is_admin %}
+    <li role="presentation" class="{% if active_tab == 'tab2' %} active{% endif %}"><a href="#">Edit Forms</a></li>
+    {% endif %}
+    <li role="presentation" class="{% if active_tab == 'tab3' %} active{% endif %}"><a href="#">Admin</a></li>
+</ul>

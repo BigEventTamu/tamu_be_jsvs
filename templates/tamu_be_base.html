@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Big Event - Job Site Verification Service</title>
+    {% load staticfiles %}
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="{% static "js/bootstrap.js" %}" ></script>
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-theme.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "css/be-jsvs.css" %}" />
+    <link href="{% static "img/favicon.ico" %}" rel="shortcut icon" type="image/x-icon" />
+    <script ></script>
+</head>
+<body>
+<div class="navbar navbar-inverse header">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/"><img src="/static/img/tamudirect-mark.png"></a>
+        </div>
+    </div>
+    <div class="navbar-logo navbar-right"><img src="/static/img/TAM-Logo-white.png"></div>
+</div>
+<div class="container">
+{% block tabs %}
+
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+</div>
+</body>
+</html>

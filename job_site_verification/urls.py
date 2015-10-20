@@ -19,9 +19,13 @@ from job_site_verification import views
 
 
 urlpatterns = [
+    url(r'^$', views.Index.as_view(), name="index"),
+    url(r'^forms/$', views.FormTypeList.as_view(), name="formtype-list"),
+
+
     url(r'^json/get-token/$', views.AuthJSON.as_view(), name="auth-json"),
-    url(r'^json/services/$', views.ServiceListJSON.as_view(), name="service-list"),
-    url(r'^json/formtypes/$', views.FormTypeListJSON.as_view(), name="formtype-list"),
-    url(r'^json/form/([0-9]+)/$', views.FormListJSON.as_view(), name="form-list"),
-    url(r'^json/form/([0-9]+)/([0-9]+)/$', views.FormDetailJSON.as_view(), name="form-detail"),
+    url(r'^json/services/$', views.ServiceListJSON.as_view(), name="service-list-json"),
+    url(r'^json/formtypes/$', views.FormTypeListJSON.as_view(), name="formtype-list-json"),
+    url(r'^json/form/([0-9]+)/$', views.FormListJSON.as_view(), name="form-list-json"),
+    url(r'^json/form/([0-9]+)/([0-9]+)/$', views.FormDetailJSON.as_view(), name="form-detail-json"),
 ]
