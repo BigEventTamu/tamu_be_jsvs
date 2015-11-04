@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+from django.core.urlresolvers import reverse
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -120,3 +122,12 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
 
+
+LOGIN_REDIRECT_URL = "/be"
+LOGIN_URL = "/be/accounts/login"
+
+if os.environ.get("USE_LOCAL_LOGIN"):
+    LOGIN_REDIRECT_URL = "/"
+    LOGIN_URL = "/accounts/login"
+
+APPEND_SLASH = True

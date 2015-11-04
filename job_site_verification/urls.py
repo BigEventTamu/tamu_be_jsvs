@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf.urls import include, url
+from django.contrib.auth import views as auth_views
 
 from job_site_verification import views
 
@@ -21,9 +22,11 @@ from job_site_verification import views
 urlpatterns = [
     url(r'^$', views.Index.as_view(), name="index"),
     url(r'^forms/$', views.FormTypeList.as_view(), name="formtype-list"),
-
+    url(r'^accounts/login/$', auth_views.login, name="login"),
+    url(r'^accounts/logout/$', auth_views.logout, name="logout"),
 
     url(r'^json/get-token/$', views.AuthJSON.as_view(), name="auth-json"),
+    url(r'^json/jobstubs/$', views.JobStubListJSON.as_view(), name="jobstubs-json"),
     url(r'^json/services/$', views.ServiceListJSON.as_view(), name="service-list-json"),
     url(r'^json/formtypes/$', views.FormTypeListJSON.as_view(), name="formtype-list-json"),
     url(r'^json/form/([0-9]+)/$', views.FormListJSON.as_view(), name="form-list-json"),

@@ -1,0 +1,10 @@
+{% extends "tamu_be_base.html" %}
+
+{% block content %}
+    {% if not form %}
+    <div class="alert alert-info">
+    You've been logged out! To log back in, <a href="{% url "login" %}">click here.</a>
+    </div>
+    {% endif %}
+
+{% endblock %}

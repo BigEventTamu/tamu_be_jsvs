@@ -5,6 +5,55 @@ from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 
 
+JOB_STATE_CHOICES = (
+    ("survey_canceled", "Survey Canceled"),
+    ("needs_survey", "Needs Survey"),
+    ("survey_completed", "Survey Completed")
+)
+
+class JobRequestStub(models.Model):
+    reserved_by = models.ForeignKey(User, blank=True, null=True)
+    job_zone = models.CharField(max_length=4, db_index=True)
+    job_zone_team = models.CharField(max_length=4, db_index=True)
+    job_request_id = models.CharField(max_length=16, db_index=True)
+    job_description = models.TextField(max_length=2048)
+    job_state = models.CharField(max_length=32, choices=JOB_STATE_CHOICES, default="needs_survey", db_index=True)
+
+    address_1 = models.CharField(max_length="128", blank=True, null=True)
+    address_2 = models.CharField(max_length="128", blank=True, null=True)
+    zip_code = models.CharField(max_length="16", blank=True, null=True)
+    city = models.CharField(max_length="128", blank=True, null=True)
+    state = models.CharField(max_length="16", blank=True, null=True)
+    lat = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+    lon = models.DecimalField(max_digits=9, decimal_places=6, blank=True, null=True)
+
+    def __unicode__(self):
+        return str(self.job_request_id) + " -- " + self.address()
+
+    def address(self):
+        if self.address_1 and self.city and self.state and self.zip_code:
+            return "{0} {1}, {2}, {3} {4}".format(self.address_1, self.address_2, self.city, self.state, self.zip_code)
+        return ""
+
+    def as_dict(self):
+        return {
+            "job_request_id": self.job_request_id,
+            "job_description": self.job_description,
+            "job_state": self.job_state,
+            "location":
+                {
+                    "full_address": self.address,
+                    "address_1": self.address_1,
+                    "address_2": self.address_2,
+                    "zip_code": self.zip_code,
+                    "city": self.city,
+                    "state": self.state,
+                    "lat": self.lat,
+                    "lon": self.lon,
+                }
+        }
+
+
 class Service(models.Model):
     name = models.CharField(max_length=100, help_text="Name of Service")
     description = models.TextField(help_text="Description of Service")
@@ -89,6 +138,7 @@ class ServiceFormFieldChoice(models.Model):
 class ServiceRequestForm(models.Model): #One per customer per service request
     service = models.ForeignKey(Service)
     form = models.ForeignKey(ServiceForm)
+    job_stub = models.ForeignKey(JobRequestStub, blank=True, null=True)
     requested_by = models.ForeignKey(User, blank=True, null=True)
     completed = models.DateTimeField(auto_now=True, editable=False)
 
@@ -98,6 +148,8 @@ class ServiceRequestForm(models.Model): #One per customer per service request
         form['form_type'] = self.form.id
         form['form_name'] = self.form.name
         form['form_desc'] = self.form.description
+        if self.job_stub:
+            form['job_request'] = self.job_stub.as_dict()
         form['fields'] = []
 
         field_objs = self.form.serviceformfield_set.all()

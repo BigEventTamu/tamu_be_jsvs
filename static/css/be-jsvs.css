@@ -30,14 +30,22 @@ header .navbar .navbar-brand {
   font-size: 19px;
   font-weight: 300;
   line-height: 19px;
+  position: absolute;
+  top: 5%;
+  left: 2%;
+  margin-right: 5px;
+  width: 75px;
+}
+
+.navbar.header .navbar-brand img,
+header .navbar .navbar-brand img {
+  width: 50px;
 }
 
 @media (min-width: 768px) {
-  .navbar.header .navbar-brand,
-  header .navbar .navbar-brand {
-    font-size: 28.5px;
-    font-weight: 300;
-    line-height: 34.2px;
+  .navbar.header .navbar-brand img,
+  header .navbar .navbar-brand img{
+    width: 75px;
   }
 }
 
@@ -537,4 +545,19 @@ dt {
 
 .panel-primary .panel-heading a {
     color: #ffffff;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+#inputPassword{
+  padding-bottom: 10px;
+}
+
+.be-nav{
+  margin-bottom: 2em;
+
 }
