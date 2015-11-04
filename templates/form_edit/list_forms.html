@@ -1,0 +1,56 @@
+{% extends "tamu_be_base.html" %}
+
+{% block tabs %}
+{% include "tabs.html" with active_tab="forms" %}
+{% endblock %}
+
+{% block content %}
+    <table id="form_list" class="display" cellspacing="0" width="100%">
+    <thead>
+    <tr>
+        <th>
+            Address
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            Job Zone
+        </th>
+        <th>
+            Job Zone Team
+        </th>
+        <th>
+            BigEventOnline ID
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for job in jobs_to_verify %}
+        <tr>
+        <td>
+            {{ job.address }}
+        </td>
+        <td>
+            {{ job.get_job_state_display }}
+        </td>
+        <td>
+            {{ job.job_zone }}
+        </td>
+        <td>
+            {{ job.job_zone_team }}
+        </td>
+        <td>
+            <a href="#" target="_blank">{{ job.job_request_id }}</a>
+        </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#form_list').DataTable();
+        } );
+    </script>
+{% endblock %}

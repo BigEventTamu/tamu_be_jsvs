@@ -136,16 +136,17 @@ class FormDetailJSON(APIView):
         return Response(f.as_dict(), status=status.HTTP_400_BAD_REQUEST)
 
 
-class FormTypeList(View):
+class FormList(View):
+    @method_decorator(login_required)
     def get(self, request):
-        form_types_list = models.ServiceForm.objects.all()
-        return render(request, "form_edit/form_list.html", {"form_types": form_types_list})
+        jobs_to_verify = models.JobRequestStub.objects.filter(job_state="needs_survey")
+        return render(request, "form_edit/list_forms.html", {"jobs_to_verify": jobs_to_verify})
 
 
 class Index(View):
     @method_decorator(login_required)
     def get(self, request):
-        stats = {}
+        stats = dict()
         stats["need_survey"] = models.JobRequestStub.objects.filter(job_state="needs_survey").count()
         stats["surveys_completed"] = models.JobRequestStub.objects.filter(job_state="survey_completed").count()
         return render(request, "index.html", {"stats": stats})

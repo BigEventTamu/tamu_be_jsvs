@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs be-nav">
     <li role="presentation" class="{% if active_tab == 'overview' %} active{% endif %}"><a href="#">Overview</a></li>
-    <li role="presentation" class="{% if active_tab == 'forms' %} active{% endif %}"><a href="#">Forms</a></li>
+    <li role="presentation" class="{% if active_tab == 'forms' %} active{% endif %}"><a href="{% url "list-forms" %}">Forms</a></li>
     {% if user.is_staff %}
     <li role="presentation" class="{% if active_tab == 'edit_forms' %} active{% endif %}"><a href="#">Edit Available Forms</a></li>
     <li role="presentation" class="{% if active_tab == 'admin' %} active{% endif %}"><a href="{% url "admin:index" %}">Admin</a></li>
