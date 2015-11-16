@@ -22,8 +22,12 @@ from job_site_verification import views
 urlpatterns = [
     url(r'^$', views.Index.as_view(), name="index"),
     url(r'^forms/$', views.FormList.as_view(), name="list-forms"),
-    url(r'^forms/edit-forms/$', views.EditServiceFormList.as_view(), name="edit-service-form-list",),
-    url(r'^forms/edit-forms/([0-9]+)/$', views.EditServiceForm.as_view(), name="edit-service-form"),
+
+    url(r'^forms/([0-9]+)/$', views.JobRequestFormList.as_view(), name="select-job-request-form"),
+    url(r'^forms/([0-9]+)/([0-9]+)/$', views.JobRequestForm.as_view(), name="job-request-form"),
+
+    url(r'^forms/edit-service-forms/$', views.EditServiceFormList.as_view(), name="edit-service-form-list",),
+    url(r'^forms/edit-service-forms/([0-9]+)/$', views.EditServiceForm.as_view(), name="edit-service-form"),
 
     url(r'^accounts/login/$', auth_views.login, name="login"),
     url(r'^accounts/logout/$', auth_views.logout, name="logout"),

@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.middleware import csrf
@@ -149,6 +150,8 @@ class Index(View):
         stats = dict()
         stats["need_survey"] = models.JobRequestStub.objects.filter(job_state="needs_survey").count()
         stats["surveys_completed"] = models.JobRequestStub.objects.filter(job_state="survey_completed").count()
+        stats["total"] = stats["need_survey"] + stats["surveys_completed"]
+        stats["progress"] = stats["surveys_completed"]/float(stats["total"]) * 100.00
         return render(request, "index.html", {"stats": stats})
 
 class EditServiceFormList(View):
@@ -179,6 +182,42 @@ class EditServiceForm(View):
                 field_formset.save()
                 #if "editChoices" in request.POST:
                 #    return redirect("modify_choices", sf.pk)
+                messages.add_message(request, messages.SUCCESS, "Form Updated.")
                 return redirect('edit-service-form-list')
+        messages.add_message(request, messages.ERROR, "Unable to save form.")
         return render(request, "form_edit/modify_form_fields.html", {"field_formset": field_formset, "form": form,
                                                                      "service_form": service_form})
+
+
+class JobRequestFormList(View):
+    @method_decorator(login_required)
+    def get(self, request, job_request_id):
+        jr = get_object_or_404(models.JobRequestStub, id=job_request_id)
+        return render(request, "request_form/service_form_list.html",
+                      {"service_forms": models.ServiceForm.objects.all(), "jr": jr})
+
+
+class JobRequestForm(View):
+    @method_decorator(login_required)
+    def get(self, request, job_request_id, service_form_id):
+        jr = get_object_or_404(models.JobRequestStub, id=job_request_id)
+        sf = get_object_or_404(models.ServiceForm, id=service_form_id)
+        form = forms.RequestForm(service_form=sf)
+        return render(request, "request_form/request_form.html", {"jr": jr, "sf": sf, "form": form})
+
+
+    @method_decorator(login_required)
+    def post(self, request, job_request_id, service_form_id):
+        jr = get_object_or_404(models.JobRequestStub, id=job_request_id)
+        sf = get_object_or_404(models.ServiceForm, id=service_form_id)
+        form = forms.RequestForm(request.POST, service_form=sf)
+        if form.is_valid():
+            jr.job_state = "survey_completed"
+            jr.save()
+            srf = models.ServiceRequestForm(service=sf.service, form=sf, requested_by=request.user,
+                                            job_stub=jr)
+            srf.save(form.cleaned_data)
+            messages.add_message(request, messages.SUCCESS, "Job Site Verification Submitted!")
+            return redirect('edit-service-form-list')
+        messages.add_message(request, messages.ERROR, "Unable to save form.")
+        return render(request, "request_form/request_form.html", {"jr": jr, "sf": sf, "form": form})

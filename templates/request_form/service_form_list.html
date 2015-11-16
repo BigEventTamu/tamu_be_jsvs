@@ -1,0 +1,28 @@
+{% extends "tamu_be_base.html" %}
+
+{% block tabs %}
+{% include "tabs.html" with active_tab="forms" %}
+{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="{% url "list-forms" %}">Form List</a></li>
+  <li class="active">Select Form Type</li>
+</ol>
+
+<ul class="media-list">
+    {% for sf in service_forms %}
+    <li class="media">
+        <div class="media-left">
+
+        </div>
+        <div class="media-body">
+            <a href="{% url "job-request-form" jr.id sf.id %}">
+                <h4 class="media-heading">{{ sf.name }} <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></h4>
+            </a>
+            {{ sf.description }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -5,5 +5,12 @@
 {% endblock %}
 
 {% block content %}
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="{{ stats.surveys_completed }}" aria-valuemin="0" aria-valuemax="{{ stats.total }}" style="width: {{ stats.progress }}%;">
+        <span class="sr-only">{{ stats.surveys_completed }} of {{ stats.total }} Complete</span>
+    </div>
+    </div>
+
     {{ stats }}
+    What goes here?
 {% endblock %}
