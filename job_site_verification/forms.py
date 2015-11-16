@@ -19,12 +19,12 @@ class ModifyServiceForm(forms.ModelForm):
     class Meta:
         model = Service
         fields = ["name", "description",]
-    
+
 
 class ModifyRequestForm(forms.ModelForm):
     class Meta:
         model = ServiceForm
-        fields = ['service', 'name', 'description', 'is_current']
+        fields = ['name', 'description', 'is_current']
 
 class ModifyServiceFormField(forms.ModelForm):
     class Meta:

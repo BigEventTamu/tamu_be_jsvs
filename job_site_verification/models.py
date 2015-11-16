@@ -42,7 +42,7 @@ class JobRequestStub(models.Model):
             "job_state": self.job_state,
             "location":
                 {
-                    "full_address": self.address,
+                    "full_address": self.address(),
                     "address_1": self.address_1,
                     "address_2": self.address_2,
                     "zip_code": self.zip_code,

@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.middleware import csrf
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -150,3 +150,35 @@ class Index(View):
         stats["need_survey"] = models.JobRequestStub.objects.filter(job_state="needs_survey").count()
         stats["surveys_completed"] = models.JobRequestStub.objects.filter(job_state="survey_completed").count()
         return render(request, "index.html", {"stats": stats})
+
+class EditServiceFormList(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        return render(request, "form_edit/service_form_list.html", {"service_forms": models.ServiceForm.objects.all()})
+
+
+class EditServiceForm(View):
+    @method_decorator(login_required)
+    def get(self, request, service_form_id):
+        sf = get_object_or_404(models.ServiceForm, pk=service_form_id)
+        form = forms.ModifyRequestForm(instance=sf)
+        field_formset = forms.FieldFormSet(instance=sf)
+        return render(request, "form_edit/modify_form_fields.html", {"field_formset": field_formset, "form": form,
+                                                                     "service_form": sf})
+
+    @method_decorator(login_required)
+    def post(self, request, service_form_id):
+        service_form = get_object_or_404(models.ServiceForm, pk=service_form_id)
+        form = forms.ModifyRequestForm(request.POST, instance=service_form)
+        field_formset = forms.FieldFormSet(request.POST, instance=service_form)
+        if form.is_valid():
+            sf = form.save(commit=False)
+            field_formset = forms.FieldFormSet(request.POST, instance=sf)
+            if field_formset.is_valid():
+                sf.save()
+                field_formset.save()
+                #if "editChoices" in request.POST:
+                #    return redirect("modify_choices", sf.pk)
+                return redirect('edit-service-form-list')
+        return render(request, "form_edit/modify_form_fields.html", {"field_formset": field_formset, "form": form,
+                                                                     "service_form": service_form})
