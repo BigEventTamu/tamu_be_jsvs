@@ -561,3 +561,75 @@ dt {
   margin-bottom: 2em;
 
 }
+
+#form_type_data {
+  margin-left: 3em;
+}
+
+#form_type_data tr > td{
+  padding-bottom: 1em;
+}
+
+span.helptext{
+    font-size: 0.9em;
+    color: #999999;
+    display: block;
+}
+
+#all_fields_table {
+  margin-left: 3em;
+}
+
+#all_fields_table tr > td{
+  padding-bottom: 0.1em;
+}
+
+.field_table {
+  margin-bottom: 2em;
+  border-left: 2px solid #DDDDDD;
+}
+
+.field_table_label{
+  padding-left: 0.5em;
+  padding-right: 0.3em;
+}
+.field_table_checkbox_label{
+  padding-left: 0.5em;
+}
+.move_links {
+  padding-left: 0.5em;
+}
+
+.move_links_down {
+  padding-left: 3em;
+  text-align: right;
+  align: right;
+}
+
+.field_table_checkbox_label > input {
+  margin-right: 3em;
+}
+
+#form_type_data th{
+  vertical-align: top;
+  padding-right: 0.5em;
+}
+
+#request-form tr > th{
+  vertical-align: top;
+  padding-right: 1em;
+}
+
+#request-form td {
+    vertical-align: top;
+    padding-bottom: 0.75em;
+}
+
+#request_form{
+  padding-left: 3em;
+}
+
+.errorlist {
+   list-style-type: none;
+   color: red;
+}

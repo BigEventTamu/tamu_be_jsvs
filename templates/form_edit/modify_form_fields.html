@@ -19,96 +19,102 @@
     {% csrf_token %}
     <div id="service_select">
     <table id="form_field_table">
-    {{ form.as_table }}
-    <tr>
-        <td>
-            {{ field_formset.management_form }}
-        </td>
-    </tr>
-    <tr>
-        <td style="padding:0;">
-            <h4>Fields:</h4>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">
-            <table id="all_fields_table">
-                {% for f in field_formset %}
-                    <tr id="pos_{{ f.position.auto_id }}" class="field_row {% if f.field_label.value %} old_field{% endif %}"
-                         value="{{f.position.value}}">
-                        <td colspan="2">
-                            <table class="field_table">
-                                <tr>
-                                    <td colspan="2">
-                                    {{f.errors}}
-                                    {{ f.id }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                    <input type="hidden" value="{{f.position.value}}" id="{{f.position.auto_id}}"
-                                        name="{{f.position.html_name}}" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="field_table_label" >
-                                    {{f.field_label.label_tag}}
-                                    </td>
-                                    <td class="field_table_field" >
-                                        {{f.field_label}}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="field_table_label">
-                                    {{f.field_type.label_tag}}
-                                    </td>
-                                    <td class="field_table_field" >
-                                        {{ f.field_type }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="field_table_label">
-                                        {{f.help_text.label_tag}}
-                                    </td>
-                                    <td class="fied_table_field">
-                                        {{f.help_text }}
-                                        <span class="helptext">{{f.help_text.help_text}}</span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="field_table_checkbox_label">
-                                        {{ f.required.label_tag }}
-                                        {{f.required}}
-                                    </td>
-                                    {% if f.field_label.value and field_formset.can_delete %}
-                                        <td class="field_table_checkbox_label">
-                                        {{f.DELETE.label_tag}}
-                                        {{ f.DELETE }}
+        <tr>
+            <td colspan="2">
+                <table id="form_type_data">
+                    {{ form.as_table }}
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ field_formset.management_form }}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding:0;">
+                <h4>Fields:</h4>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table id="all_fields_table">
+                    {% for f in field_formset %}
+                        <tr id="pos_{{ f.position.auto_id }}" class="field_row {% if f.field_label.value %} old_field{% endif %}"
+                             value="{{f.position.value}}">
+                            <td colspan="2">
+                                <table class="field_table">
+                                    <tr>
+                                        <td colspan="2">
+                                        {{f.errors}}
+                                        {{ f.id }}
                                         </td>
-                                    {% else %}
-                                        <td class="field_table_checkbox_label"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                        <input type="hidden" value="{{f.position.value}}" id="{{f.position.auto_id}}"
+                                            name="{{f.position.html_name}}" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field_table_label" >
+                                        {{f.field_label.label_tag}}
+                                        </td>
+                                        <td class="field_table_field" >
+                                            {{f.field_label}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field_table_label">
+                                        {{f.field_type.label_tag}}
+                                        </td>
+                                        <td class="field_table_field" >
+                                            {{ f.field_type }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field_table_label">
+                                            {{f.help_text.label_tag}}
+                                        </td>
+                                        <td class="fied_table_field">
+                                            {{f.help_text }}
+                                            <span class="helptext">{{f.help_text.help_text}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="field_table_checkbox_label" colspan="2">
+                                            {{ f.required.label_tag }}
+                                            {{f.required}}
+
+                                        {% if f.field_label.value and field_formset.can_delete %}
+
+                                            {{f.DELETE.label_tag}}
+                                            {{ f.DELETE }}
+                                            </td>
+                                        {% else %}
+                                           </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% if f.field_label.value %}
+                                    <tr>
+                                        <td class="move_links" colspan="2">
+                                            <a href="javascript:moveFieldUp('pos_{{f.position.auto_id}}')">Move Field Up <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></a>
+                                            <a class="move_links_down" href="javascript:moveFieldDown('pos_{{f.position.auto_id}}')">Move Field Down <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+                                        </td>
+                                    </tr>
                                     {% endif %}
-                                </tr>
-                                {% if f.field_label.value %}
-                                <tr>
-                                    <td class="move_links" colspan="2">
-                                        <a href="javascript:moveFieldUp('pos_{{f.position.auto_id}}')">Move Field Up</a>
-                                        <a href="javascript:moveFieldDown('pos_{{f.position.auto_id}}')">Move Field Down</a>
-                                    </td>
-                                </tr>
-                                {% endif %}
-                            </table>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </td>
-    </tr>
-    <tr id="newFieldBar">
-        <td colspan="2">
-            <a class="add_new_field_link" href="javascript:addNewField()"><i class="icon-plus"></i> Add Another Field</a>
-        </td>
-    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+        <tr id="newFieldBar">
+            <td colspan="2">
+                <a class="add_new_field_link" href="javascript:addNewField()"><i class="icon-plus"></i> Add Another Field</a>
+            </td>
+        </tr>
     </table>
     <button type="submit" name="btn" class="blueBtn"><span>Save Form</span></button>
     <button type="submit" name="editChoices" class="blueBtn"><span>Save Form and Edit Choices</span></button>

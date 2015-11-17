@@ -10,21 +10,45 @@
   <li><a href="{% url "select-job-request-form" jr.id %}">Select Form Type</a></li>
   <li class="active">{{ sf.name }}</li>
 </ol>
-
+    <h3 id="form_name">Form: {{ sf.name }}</h3>
     <div id="request_form">
-        <h4 id="form_name">Form: {{ sf.name }}</h4>
+
         <div id="jr_desc">
-            <ul>
+            <h4 class="jr_customer_info_title">
+                Resident Information
+            </h4>
+            <ul class="jr_customer_info">
+                <li>
+                    Name: Not implemented
+                </li>
+                <li>
+                    Phone: Not implemented
+                </li>
                 <li>
                     Address: {{ jr.address }}
                 </li>
+
             </ul>
         </div>
+        {% if form.errors %}
+        <div class="alert alert-danger " role="alert">
+            {% for field in form  %}
+                {% if field.errors %}
+                    {{ field.label }} - {% for id, error in field.errors %} {{  field.errors }} {% endfor %} <br />
+                {% endif %}
+            {% endfor %}
+
+        </div>
+        {% endif %}
+
         <form id="request-form" action="." method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
+                <table>
+                {{ form.as_table }}
+                </table>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
+
     </div>
 
 {% endblock %}
