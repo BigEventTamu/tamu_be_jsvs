@@ -123,8 +123,8 @@ TEMPLATE_DIRS = (
 )
 
 
-LOGIN_REDIRECT_URL = "/be"
-LOGIN_URL = "/be/accounts/login"
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/accounts/login"
 
 if os.environ.get("USE_LOCAL_LOGIN"):
     LOGIN_REDIRECT_URL = "/"

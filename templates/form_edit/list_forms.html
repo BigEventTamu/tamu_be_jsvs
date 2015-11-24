@@ -55,8 +55,35 @@
     </table>
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            $('#form_list').DataTable();
+        jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+            "enum-pre": function ( a ) {
+                // Add / alter the switch statement below to match your enum list
+                switch( a ) {
+                    case "Needs Survey":   return 1;
+                    case "Survey Completed": return 2;
+                    case "Survey Canceled":    return 3;
+                    default:       return 4;
+                }
+            },
+
+            "enum-asc": function ( a, b ) {
+                return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+            },
+
+            "enum-desc": function ( a, b ) {
+                return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+            }
         } );
+
+
+        $(document).ready(function() {
+            $('#form_list').DataTable( {
+             columnDefs: [
+               { type: 'enum', targets: 1 }
+             ],
+             "order": [[ 2, "desc" ]],
+             "jQueryUI": true
+          });
+        });
     </script>
 {% endblock %}
