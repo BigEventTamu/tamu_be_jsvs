@@ -131,3 +131,13 @@ if os.environ.get("USE_LOCAL_LOGIN"):
     LOGIN_URL = "/be/accounts/login"
 
 APPEND_SLASH = True
+
+BROKER_URL = "amqp://jsvs:jsvs_pass@localhost:5672/jsvs"
+
+#Celery
+CELERY_BACKEND = "amqp"
+CELERY_DEFAULT_QUEUE = "jsvs"
+CELERY_RESULT_DBURI = ""
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
