@@ -33,7 +33,7 @@ class ModifyServiceFormField(forms.ModelForm):
 
 FieldFormSet = inlineformset_factory(ServiceForm, ServiceFormField, form=ModifyServiceFormField, can_order=True, can_delete=True)
 ChoiceFormSet = inlineformset_factory(ServiceFormField, ServiceFormFieldChoice,
-                                      fields=['choice'], can_delete=True)
+                                      fields=['choice'], can_delete=True, extra=1)
 
 class SelectRequestForm(forms.Form):
     service_form_id = forms.ChoiceField()

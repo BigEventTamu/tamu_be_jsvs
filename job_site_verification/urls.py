@@ -29,6 +29,9 @@ urlpatterns = [
     url(r'^forms/edit-service-forms/$', views.EditServiceFormList.as_view(), name="edit-service-form-list",),
     url(r'^forms/edit-service-forms/([0-9]+)/$', views.EditServiceForm.as_view(), name="edit-service-form"),
 
+    url(r'^forms/edit-service-forms/([0-9]+)/choices/$', views.EditServiceFormChoices.as_view(),
+        name="edit-service-form-choices"),
+
     url(r'^accounts/login/$', auth_views.login, name="login"),
     url(r'^accounts/logout/$', auth_views.logout, name="logout"),
 

@@ -12,12 +12,10 @@ class ChoicesInline(admin.StackedInline):
     model = ServiceFormFieldChoice
     extra = 2
 
-class FieldAdmin(admin.ModelAdmin):
-    inlines = [ChoicesInline]
 
 admin.site.register(ServiceRequestForm)
 admin.site.register(ServiceRequestFormFieldAnswer)
 admin.site.register(ServiceForm, ServiceFormAdmin)
-admin.site.register(ServiceFormField, FieldAdmin)
+admin.site.register(ServiceFormField)
 admin.site.register(JobRequestStub)
 admin.site.register(Service)

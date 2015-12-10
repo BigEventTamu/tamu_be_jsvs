@@ -5,12 +5,19 @@
 {% endblock %}
 
 {% block content %}
+
+
+    Verifications Completed: {{ stats.surveys_completed }} of {{ stats.total }}
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow="{{ stats.surveys_completed }}" aria-valuemin="0" aria-valuemax="{{ stats.total }}" style="width: {{ stats.progress }}%;">
         <span class="sr-only">{{ stats.surveys_completed }} of {{ stats.total }} Complete</span>
     </div>
     </div>
-
+    <!--
+    <div id="metrics">
+        TODO: Get list of valuable metrics for big event staff to see here. <br />
+        Possible metrics: Progress by zone. Progress by team. Team with most verifications.
+    </div>
     {{ stats }}
-    What goes here?
+    -->
 {% endblock %}

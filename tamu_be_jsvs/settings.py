@@ -124,10 +124,10 @@ TEMPLATE_DIRS = (
 
 
 LOGIN_REDIRECT_URL = "/"
-LOGIN_URL = "/accounts/login"
+LOGIN_URL = "/be/accounts/login"
 
 if os.environ.get("USE_LOCAL_LOGIN"):
     LOGIN_REDIRECT_URL = "/"
-    LOGIN_URL = "/accounts/login"
+    LOGIN_URL = "/be/accounts/login"
 
 APPEND_SLASH = True

@@ -6,6 +6,7 @@ from django.middleware import csrf
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.contrib.auth import authenticate, login
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import View
@@ -18,6 +19,13 @@ from rest_framework import status
 
 from job_site_verification import models
 from job_site_verification import forms
+
+def _get_choice_fields(request_form):
+    fields = []
+    for field in request_form.serviceformfield_set.all():
+        if "Choice" in field.field_type:
+            fields.append(field)
+    return fields
 
 class AuthJSON(APIView):
     def get(self, request):
@@ -140,7 +148,7 @@ class FormDetailJSON(APIView):
 class FormList(View):
     @method_decorator(login_required)
     def get(self, request):
-        jobs_to_verify = models.JobRequestStub.objects.filter(job_state="needs_survey")
+        jobs_to_verify = models.JobRequestStub.objects.filter(Q(job_state="needs_survey") | Q(job_state="survey_completed"))
         return render(request, "form_edit/list_forms.html", {"jobs_to_verify": jobs_to_verify})
 
 
@@ -180,13 +188,44 @@ class EditServiceForm(View):
             if field_formset.is_valid():
                 sf.save()
                 field_formset.save()
-                #if "editChoices" in request.POST:
-                #    return redirect("modify_choices", sf.pk)
+                if "editChoices" in request.POST:
+                    return redirect("edit-service-form-choices", sf.pk)
                 messages.add_message(request, messages.SUCCESS, "Form Updated.")
-                return redirect('edit-service-form-list')
-        messages.add_message(request, messages.ERROR, "Unable to save form.")
+                return redirect('edit-service-form', service_form_id)
+        messages.add_message(request, messages.ERROR, "Unable to save form. ")
         return render(request, "form_edit/modify_form_fields.html", {"field_formset": field_formset, "form": form,
                                                                      "service_form": service_form})
+
+
+class EditServiceFormChoices(View):
+    @method_decorator(login_required)
+    def get(self, request, service_form_id):
+        service_form = get_object_or_404(models.ServiceForm, pk=service_form_id)
+        fields_with_choices = _get_choice_fields(service_form)
+        if fields_with_choices:
+            formsets = [dict(field=x, formset=forms.ChoiceFormSet(prefix=str(x.pk), instance=x))
+                        for x in fields_with_choices]
+        else:
+            formsets = None
+        return render(request, 'form_edit/modify_choices.html', {'formsets': formsets, 'service_form': service_form})
+
+    @method_decorator(login_required)
+    def post(self, request, service_form_id):
+        service_form = get_object_or_404(models.ServiceForm, pk=service_form_id)
+        fields_with_choices = _get_choice_fields(service_form)
+        formsets = [dict(field=x, formset=forms.ChoiceFormSet(request.POST, prefix=str(x.pk), instance=x))
+                    for x in fields_with_choices]
+        bad_form = False
+        for form in formsets:
+            if form["formset"].is_valid():
+                form["formset"].save()
+            else:
+                bad_form = True
+        if not bad_form:
+            messages.add_message(request, messages.SUCCESS, "Choices Updated.")
+            return redirect('edit-service-form-list')
+        else:
+            return render(request, 'form_edit/modify_choices.html', {'formsets': formsets, 'service_form': service_form})
 
 
 class JobRequestFormList(View):

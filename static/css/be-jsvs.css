@@ -633,3 +633,33 @@ span.helptext{
    list-style-type: none;
    color: red;
 }
+
+#request_form{
+  padding-bottom: 10em;
+}
+
+#request_form button{
+  margin-top: 1em;
+  margin-right: 2em;
+}
+
+.choice_label{
+  padding-left: 2em;
+  padding-bottom: 0.5em;
+}
+
+#all_fields{
+  padding-bottom: 3em;
+}
+
+#choice_submit{
+  margin-top: 3em;
+}
+
+.choice_field_label{
+  padding-top: 2em;
+}
+
+.delete-option{
+  padding-left:1em;
+}

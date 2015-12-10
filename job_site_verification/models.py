@@ -8,11 +8,15 @@ from django.template.loader import render_to_string
 JOB_STATE_CHOICES = (
     ("survey_canceled", "Survey Canceled"),
     ("needs_survey", "Needs Survey"),
-    ("survey_completed", "Survey Completed")
+    ("survey_completed", "Survey Completed"),
+    ("transferred_to_be", "Transferred to Big Event"),
 )
 
 class JobRequestStub(models.Model):
     reserved_by = models.ForeignKey(User, blank=True, null=True)
+    full_name = models.CharField(max_length=128, null=True, blank=True)
+    email_address = models.EmailField(blank=True, null=True)
+    phone_number = models.CharField(max_length=64, blank=True, null=True)
     job_zone = models.CharField(max_length=4, db_index=True)
     job_zone_team = models.CharField(max_length=4, db_index=True)
     job_request_id = models.CharField(max_length=16, db_index=True)
@@ -32,7 +36,7 @@ class JobRequestStub(models.Model):
 
     def address(self):
         if self.address_1 and self.city and self.state and self.zip_code:
-            return "{0} {1}, {2}, {3} {4}".format(self.address_1, self.address_2, self.city, self.state, self.zip_code)
+            return "{0} {1}, {2}, {3} {4}".format(self.address_1, self.address_2 or "", self.city, self.state, self.zip_code)
         return ""
 
     def as_dict(self):

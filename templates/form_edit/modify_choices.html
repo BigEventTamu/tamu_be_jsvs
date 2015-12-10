@@ -1,0 +1,77 @@
+{% extends "tamu_be_base.html" %}
+
+{% block tabs %}
+{% include "tabs.html" with active_tab="edit_forms" %}
+{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="{% url "edit-service-form-list" %}">Form List</a></li>
+  <li><a href="{% url "edit-service-form" service_form.id %}">Edit Form </a></li>
+  <li class="active">{{ service_form.name }}</li>
+</ol>
+
+
+<div id="service_info">
+<h3 id="service_name">{{ service_form.service.name }} - Edit Choices</h3>
+</div>
+    {% if formsets %}
+    <h3>Edit Choices:</h3>
+    <p>
+        Please add choices for the associated fields.
+    </p>
+    <form action="." method="POST">
+    {% csrf_token %}
+    <table id="all_fields">
+    {% for fd in formsets %}
+    <tr>
+        <td class="choice_field_label">
+            <h4>{{ fd.field.field_label }}</h4>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {{ fd.formset.management_form }}
+        </td>
+    </tr>
+        {% for f in fd.formset %}
+        <tr class="field_row form_{{ fd.formset.prefix }}">
+            <td colspan="2">
+                <table class="choices_for_field">
+                    <tr>
+                       <td colspan="3">
+                             {{ f.id }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="choice_label">
+                            {{  f.choice.label_tag }}
+                        </td>
+                        <td>
+                            {{ f.choice }}
+                        </td>
+                        <td class="delete-option">
+                            {% if f.choice.value and fd.formset.can_delete %}
+                                {{ f.DELETE.label_tag }}
+                                {{ f.DELETE }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>
+                <a class="add_new_field_link" href="javascript:addNewChoice({{fd.formset.prefix}})">Add additional choice</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <button id="choice_submit" type="submit" name="btn" class="blueBtn"><span>Save Choices</span></button>
+    </form>
+    {% else %}
+      <h3 style="color:orangered"> There are no choice fields in this form!</h3>
+    {% endif %}
+
+{% endblock %}

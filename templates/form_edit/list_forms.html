@@ -35,7 +35,11 @@
             {{ job.address }}
         </td>
         <td>
+            {% if job.job_state == "needs_survey" %}
             <a href="{% url "select-job-request-form" job.id %}">Complete JSV</a>
+            {% elif job.job_state == "survey_completed" %}
+            <span>Submitted</span>
+            {% endif %}
         </td>
         <td>
             {{ job.get_job_state_display }}
