@@ -13,6 +13,9 @@ setup(
         "django==1.8",
         "djangorestframework",
         "markdown",
-        "django-filter"
+        "django-filter",
+        "celery",
+        "django-celery",
+
     ],
 )

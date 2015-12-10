@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 """
 Django settings for tamu_be_jsvs project.
 
@@ -14,6 +16,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 from django.core.urlresolvers import reverse
+
+
+CELERY_RESULT_BACKEND= "djcelery.backends.database:DatabaseBackend"
+CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler""
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -42,6 +48,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'job_site_verification',
+    'djcelery',
 
 )
 
